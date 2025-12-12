@@ -1,0 +1,32 @@
+[project]
+name = "stock-backend"
+version = "0.1.0"
+description = "FastAPI backend for inventory and rental management"
+requires-python = ">=3.11"
+authors = [
+  { name = "Codex" }
+]
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.23",
+  "SQLAlchemy>=2.0",
+  "alembic>=1.12",
+  "psycopg[binary]>=3.1",
+  "python-jose[cryptography]>=3.3",
+  "passlib[bcrypt]>=1.7",
+  "pydantic-settings>=2.2",
+  "python-multipart>=0.0.9",
+  "email-validator>=2.1"
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "httpx", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+namespaces = false
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

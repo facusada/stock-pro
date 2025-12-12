@@ -1,0 +1,37 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
+
+# Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging / build
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Testing
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Tooling / editors
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# Local config
+.env
+.env.*
+
+# Alembic cache
+alembic/versions/__pycache__/
