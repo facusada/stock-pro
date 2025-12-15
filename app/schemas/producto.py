@@ -18,7 +18,7 @@ class ProductoBase(BaseModel):
     piezas_por_set: int | None = None
     stock_actual: int = 0
     stock_minimo: int = 0
-    deposito_principal_id: int
+    deposito_principal_id: int | None = None
     activo: bool = True
 
 
@@ -51,6 +51,7 @@ class ProductoRead(ProductoBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+    deposito_principal_id: int
     stock_rentado: int
     stock_disponible: int
     fecha_creacion: datetime

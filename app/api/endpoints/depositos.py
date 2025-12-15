@@ -49,11 +49,14 @@ def actualizar_deposito(
     return DepositoRead.model_validate(deposito)
 
 
-@router.delete("/{deposito_id}", status_code=204)
+@router.delete("/{deposito_id}", response_model=DepositoRead)
 def eliminar_deposito(
     deposito_id: int,
     db: Session = Depends(get_db),
     _: User = Depends(get_current_active_user),
-) -> None:
+) -> DepositoRead:
     deposito = deposito_service.get_deposito_or_404(db, deposito_id)
+    cantidad_productos = deposito_service.count_productos_for_deposito(db, deposito_id)
+    dto = DepositoRead.model_validate(deposito).model_copy(update={"cantidad_productos": cantidad_productos})
     deposito_service.delete_deposito(db, deposito)
+    return dto

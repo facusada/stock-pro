@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.models.producto import Producto
 from app.schemas.producto import ProductoCreate, ProductoUpdate
+from app.services import deposito_service
 
 
 def get_producto_or_404(db: Session, producto_id: int) -> Producto:
@@ -50,6 +51,14 @@ def create_producto(db: Session, producto_in: ProductoCreate) -> Producto:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Código de producto duplicado")
 
     data = producto_in.model_dump()
+
+    deposito_id = data.get("deposito_principal_id")
+    if deposito_id is None:
+        deposito_id = deposito_service.get_single_deposito_id(db)
+        data["deposito_principal_id"] = deposito_id
+    else:
+        deposito_service.ensure_deposito_exists(db, deposito_id)
+
     if data.get("stock_disponible") is None:
         data["stock_disponible"] = max(data.get("stock_actual", 0) - data.get("stock_rentado", 0), 0)
 

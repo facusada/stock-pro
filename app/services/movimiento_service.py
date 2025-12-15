@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.models.movimiento import MovimientoStock
 from app.models.producto import Producto
 from app.schemas.movimiento import MovimientoCreate
+from app.services import deposito_service
 
 VALID_TYPES = {"INGRESO", "EGRESO", "AJUSTE", "ALQUILER", "DEVOLUCION"}
 
@@ -97,6 +98,14 @@ def create_movimiento(
     producto.stock_disponible = max(min(producto.stock_disponible, max_disponible), 0)
 
     movimiento_data = movimiento_in.model_dump(exclude={"ajuste_positivo"})
+
+    default_deposito_id = deposito_service.get_single_deposito_id_if_any(db)
+    if default_deposito_id:
+        if movimiento_data.get("deposito_origen_id") is None:
+            movimiento_data["deposito_origen_id"] = default_deposito_id
+        if movimiento_data.get("deposito_destino_id") is None:
+            movimiento_data["deposito_destino_id"] = default_deposito_id
+
     movimiento_data["tipo"] = tipo
     if movimiento_data.get("fecha") is None:
         movimiento_data["fecha"] = datetime.now(timezone.utc)
